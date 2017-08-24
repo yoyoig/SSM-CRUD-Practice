@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/handlebars-v4.0.10.js"></script>
+    <script type="text/javascript" src="js/employee.js"></script>
+    <script id="employees-template" type="text/x-handlebars-template">
+        {{#each list}}
+        <tr>
+            <td><input class="check" type="checkbox" check_id="{{empId}}" check_name="{{empName}}"></td>
+            <td>{{empId}}</td>
+            <td>{{empName}}</td>
+            <td>{{email}}</td>
+            {{#gender gender}}
+                <td>男</td>
+            {{else}}
+                <td>女</td>
+            {{/gender}}
+            <td>{{department.deptName}}</td>
+            <td>
+                <button editId="{{empId}}" id="editBtn" type="button" class="btn btn-info">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    编辑
+                </button>
+                <button dltId="{{empId}}" id="dltBtn" type="button" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    删除
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
+    <script id="pageCode-template" type="text/x-handlebars-template">
+        <li><a id="save_cur_page" curPage="{{pageNum}}" href="#" class="page" page="1">首页</a></li>
+        <li>
+            <a class="page" page="{{pre pageNum}}" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {{#each navigatepageNums}}
+            <li {{#active ../pageNum this}} class="active" {{/active}} ><a class="page" page="{{this}}" href="#">{{this}}</a></li>
+        {{/each}}
+        <li>
+            <a class="page" page="{{next pageNum pages}}" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        <li><a class="page" page="{{pages}}" href="#">末页</a></li>
+    </script>
+
+    <script id="department-template" type="text/x-handlebars-template">
+
+        {{#with map}}
+            {{#each depts}}
+            <option {{#deptSlt ../dId deptId}}selected="selected" {{/deptSlt}} value="{{deptId}}">{{deptName}}</option>
+            {{/each}}
+        {{/with}}
+    </script>
+
+    <script id="editEmp-template" type="text/x-handlebars-template">
+
+        <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input value="{{empName}}" type="email" empId="{{empId}}" class="form-control" name="empName" id="editInputName" placeholder="Name">
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+                <input value="{{email}}" type="email" class="form-control" name="email" id="editInputEmail3" placeholder="Email">
+                <span class="help-block"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">Gender</label>
+            <div class="col-sm-10">
+                <label class="radio-inline">
+                    <input type="radio" {{#editGender gender 'M'}} checked="checked" {{/editGender}} name="gender" id="editInlineRadio1" value="M"> 男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" {{#editGender gender 'W'}} checked="checked" {{/editGender}} name="gender" id="editInlineRadio2" value="W"> 女
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="editDeptSelect" class="col-sm-2 control-label">Department</label>
+            <div class="col-sm-4">
+                <select class="form-control" name="dId" id="editDeptSelect">
+
+
+                </select>
+            </div>
+        </div>
+    </script>
+</head>
+<body>
+<!-- 新增模态框 -->
+<div class="modal fade" id="addEmpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">新增员工</h4>
+            </div>
+            <div id="addEmpForm" class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputName" class="col-sm-2 control-label">Name</label>
+                        <div id="checkName" class="col-sm-10">
+                            <input type="email" class="form-control" name="empName" id="inputName" placeholder="Name">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inlineRadio1" class="col-sm-2 control-label">Gender</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" checked="checked" name="gender" id="inlineRadio1" value="M"> 男
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="inlineRadio2" value="W"> 女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deptSelect" class="col-sm-2 control-label">Department</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="dId" id="deptSelect">
+
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addEmpSubmit">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑模态框-->
+<div class="modal fade" id="editEmpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="ModalLabel">编辑</h4>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" class="form-horizontal">
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="eidt_Emp_Btn"  type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="col-md-12">
+            <h1>SSM-CRUD</h1>
+        </div>
+        <div class="col-md-4 col-md-offset-8">
+            <button type="button" class="btn btn-primary" id="emp_add_modal_btn">新增</button>
+            <button type="button" class="btn btn-danger" id="emp_delete_all_btn">删除</button>
+        </div>
+        <table class="table table-hover table-striped">
+            <tr>
+                <td><input class="mainCheck"  type="checkbox"></td>
+                <td>id</td>
+                <td>name</td>
+                <td>email</td>
+                <td>gender</td>
+                <td>department</td>
+                <td>操作</td>
+            </tr>
+            <tbody id="employees">
+
+            </tbody>
+        </table>
+        <div class="col-md-5 col-md-offset-7">
+            <nav aria-label="Page navigation">
+                <ul id="pageCode" class="pagination">
+
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+</body>
+</html>
