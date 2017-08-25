@@ -77,7 +77,7 @@ $("xxx form")拿到form数组，$("xxx form")[0]拿到第一个form的dom对象�
         Rest风格请求URI，该过滤器可以将普通的POST请求转化为DELETE请求和PUT请求
         
         
-##### mybatis
+##### mybatis 积累
 ---------一对一映射
 在使用一对一映射时，在resultMap 中，使用association标签来使类中的属性对应一个其他类。
 javaType 就是该类的全类名。
@@ -89,3 +89,17 @@ ofTpye 为Llist包装的类。
 如: List\<Employee>  
 javaType="java.util.ArrayList" ofType="com.hand.pojo.Employee"
 javaType为list时 javaType可以省略
+
+------------------------<p>在使用pageHelper和mybatis generator时，使用多条件查询时，要注意，
+可以通用稍微修改过的关联了dept 的employee 查询，
+但是在使用example 的时候我们在原Example_Where_Clause的基础上修改和新增一个Example_Where_Clause_Condition。
+因为我们在关联查询时候，添加了where e.xxx=d.xxx。这个关联之后，原来的Example中会再次添加上where，导致语法错误。
+tirm标签也会 导致and 连接错误。
+当我们使用 where 条件连接的时候，我们需要新的example。并且去掉where和trim标签.
+</P>
+
+<p>在做这里的笔记的时候，忽然发现，可以不用新Example即可添加条件查询。
+我们在关联查询的时候使用FROM xxx LEFT OUTER JOIN xxxx ON   xxx.xx = xxx.xx
+的方式来关联查询，无需添加where，即可使用原生Example即可。
+经实践，可行。推荐使用外连接方式关联。</P>
+

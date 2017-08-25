@@ -85,4 +85,16 @@ public class EmployeeServiceImp implements EmployeeService {
         example.createCriteria().andEmpIdIn(ids);
         return mapper.deleteByExample(example);
     }
+
+    @Override
+    public PageInfo getEmployeesByCondition(int pn, int size) {
+        //用分页插件和generator 好像必须重写新的查询
+        EmployeeExample example = new EmployeeExample();
+        example.createCriteria().andEmpNameLike("%23%").andDIdEqualTo(5);
+        PageHelper.startPage(pn,size);
+        List<Employee> list = mapper.selectByExampleWithDepartment(example);
+        PageInfo<Employee> pageInfo = new PageInfo<Employee>(list,5);
+
+        return pageInfo;
+    }
 }

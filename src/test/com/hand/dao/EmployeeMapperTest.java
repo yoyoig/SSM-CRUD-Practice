@@ -50,8 +50,11 @@ public class EmployeeMapperTest {
 //        PageInfo<Employee> list = service.getEmployees(1,5);
 //        System.out.println(list.getList().get(2));
 
-        Boolean b = service.checkEmpName("4935ca");
-        System.out.println(b);
+//        Boolean b = service.checkEmpName("4935ca");
+//        System.out.println(b);
+
+        PageInfo pageInfo = service.getEmployeesByCondition(1,5);
+        System.out.println(pageInfo.getList().size());
     }
 
 }

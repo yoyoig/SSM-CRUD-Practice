@@ -23,4 +23,6 @@ public interface EmployeeService {
     int dltOneEmployee(int id);
 
     int dltEmployees(String empId);
+
+    PageInfo getEmployeesByCondition(int pn, int size);
 }
