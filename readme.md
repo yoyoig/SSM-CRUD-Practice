@@ -86,6 +86,6 @@ javaType 就是该类的全类名。
 在一对多映射中，在resultMap中使用collection标签来对应类中的集合。
 javaType 在collection中默认为java.util.ArrayList，当属性为List时，可以不写
 ofTpye 为Llist包装的类。
-如: List<Employee>  
+如: List\<Employee>  
 javaType="java.util.ArrayList" ofType="com.hand.pojo.Employee"
-javaType为list时 可以省略
+javaType为list时 javaType可以省略
