@@ -75,3 +75,17 @@ $("xxx form")拿到form数组，$("xxx form")[0]拿到第一个form的dom对象�
         若没有这个过滤器，tomcat将无法为我们传递数据到后台。
         还需要配置HiddenHttpMethodFilter过滤器
         Rest风格请求URI，该过滤器可以将普通的POST请求转化为DELETE请求和PUT请求
+        
+        
+##### mybatis
+---------一对一映射
+在使用一对一映射时，在resultMap 中，使用association标签来使类中的属性对应一个其他类。
+javaType 就是该类的全类名。
+
+---------一对多映射
+在一对多映射中，在resultMap中使用collection标签来对应类中的集合。
+javaType 在collection中默认为java.util.ArrayList，当属性为List时，可以不写
+ofTpye 为Llist包装的类。
+如: List<Employee>  
+javaType="java.util.ArrayList" ofType="com.hand.pojo.Employee"
+javaType为list时 可以省略

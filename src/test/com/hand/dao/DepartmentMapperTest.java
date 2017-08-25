@@ -22,11 +22,14 @@ public class DepartmentMapperTest {
     @Test
     public void insertSelective() throws Exception {
 
-        mapper.insertSelective(new Department(1,"测试部"));
-        mapper.insertSelective(new Department(2,"开发部"));
-        mapper.insertSelective(new Department(3,"移动部"));
-        mapper.insertSelective(new Department(4,"运维部"));
-        mapper.insertSelective(new Department(5,"实施部"));
+//        mapper.insertSelective(new Department(1,"测试部"));
+//        mapper.insertSelective(new Department(2,"开发部"));
+//        mapper.insertSelective(new Department(3,"移动部"));
+//        mapper.insertSelective(new Department(4,"运维部"));
+//        mapper.insertSelective(new Department(5,"实施部"));
+
+        Department department = mapper.selectByPrimaryKeyWithEmployee(5);
+        System.out.println(department);
 
     }
 

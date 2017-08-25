@@ -66,6 +66,36 @@
   <sql id="Base_Column_List" >
     dept_id, dept_name
   </sql>
+
+  <!--//关联查询employe字段-->
+  <sql id="BaseWithEmp_Column_List" >
+    d.`dept_id`,d.dept_name,e.`emp_id`,e.emp_name,e.`email`,e.`gender`
+  </sql>
+
+  <!--//关联查询employee结果集-->
+  <resultMap id="WithEmployeeResult" type="com.hand.pojo.Department">
+    <id column="dept_id" property="deptId" jdbcType="INTEGER" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+
+    <collection property="list" javaType="java.util.ArrayList" ofType="com.hand.pojo.Employee" >
+      <id column="emp_id" property="empId" jdbcType="INTEGER" />
+      <result column="emp_name" property="empName" jdbcType="VARCHAR" />
+      <result column="gender" property="gender" jdbcType="CHAR" />
+      <result column="email" property="email" jdbcType="VARCHAR" />
+    </collection>
+
+  </resultMap>
+
+  <select id="selectByPrimaryKeyWithEmployee" resultMap="WithEmployeeResult" parameterType="int" >
+    select
+    <include refid="BaseWithEmp_Column_List" />
+    FROM tbl_dept d
+    LEFT OUTER JOIN tbl_emp e
+    ON d.`dept_id` = e.`d_id`
+    WHERE d.`dept_id` =#{id}
+  </select>
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hand.pojo.DepartmentExample" >
     select
     <if test="distinct" >

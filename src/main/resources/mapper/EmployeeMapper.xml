@@ -103,6 +103,8 @@
       order by ${orderByClause}
     </if>
   </select>
+
+
   <select id="selectByPrimaryKeyWithDepartment" resultMap="WithDepartmentResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="WithDepartmentBase_Column_List" />

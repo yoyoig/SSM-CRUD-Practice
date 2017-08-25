@@ -37,7 +37,6 @@ public class EmployeeServiceImp implements EmployeeService {
             PageInfo<Employee> pageInfo2 = new PageInfo<Employee>(employeeList2,5);
             return pageInfo2;
         }else {
-
             return pageInfo;
         }
 
